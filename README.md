@@ -6,9 +6,9 @@ A Model Context Protocol (MCP) server that provides seamless integration with at
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ Working in Sandbox | 5 | 56% |
-| ❌ Not Working (Sandbox Limitations) | 4 | 44% |
-| 🧪 Total Tools | 9 | 100% |
+| ✅ Working in Sandbox | 5 | 38% |
+| ❌ Not Working (Sandbox Limitations) | 8 | 62% |
+| 🧪 Total Tools | 13 | 100% |
 
 ## Features
 
@@ -224,7 +224,7 @@ const availability = await mcpClient.callTool('check_appointment_availability', 
 
 ---
 
-### ❌ Not Working in Sandbox (4 tools)
+### ❌ Not Working in Sandbox (8 tools)
 
 These tools require production environment with full clinical access.
 
@@ -243,6 +243,22 @@ These tools require production environment with full clinical access.
 #### 9. create_prescription
 **Status:** ❌ Not Working - 404 Error
 **Reason:** E-prescribing endpoint not available in sandbox
+
+#### 10. get_patient_encounters
+**Status:** ❌ Not Working - 404 Error
+**Reason:** Encounter endpoints not available in sandbox environment
+
+#### 11. get_encounter
+**Status:** ❌ Not Working - 404 Error
+**Reason:** Encounter endpoints not available in sandbox environment
+
+#### 12. create_encounter
+**Status:** ❌ Not Working - 404 Error
+**Reason:** Encounter creation requires production API with clinical documentation access
+
+#### 13. update_encounter
+**Status:** ❌ Not Working - 404 Error
+**Reason:** Encounter endpoints not available in sandbox environment
 
 **Note:** See [athenahealth-mcp-tools-readme.md](athenahealth-mcp-tools-readme.md) for detailed information on production requirements for these tools.
 
@@ -317,7 +333,9 @@ const providers = await mcpClient.callTool('list_providers', {
 - ✅ Patient registration workflows
 - ✅ Demographics and search
 - ✅ Department and provider listing
+- ✅ Appointment availability checking (returns empty)
 - ❌ Clinical data (allergies, prescriptions, problems, vitals, labs)
+- ❌ Encounter management (get, create, update)
 - ❌ Appointment creation
 - ❌ E-prescribing
 - ❌ Drug interaction checking
@@ -325,7 +343,8 @@ const providers = await mcpClient.callTool('list_providers', {
 **Production Environment:**
 Requires:
 - Full athenahealth production API access
-- Clinical endpoints enabled
+- Clinical endpoints enabled (allergies, prescriptions, problems, vitals, labs, alerts)
+- Encounter documentation access
 - E-prescribing licenses and integrations
 - Scheduling templates configured
 - Provider credentials (NPI, DEA numbers)
@@ -409,12 +428,20 @@ npm run build
 
 The codebase is modularized for maintainability:
 
+**MCP Server Layer:**
 - **[src/mcp-server.ts](src/mcp-server.ts)** - Main MCP server (323 lines)
-- **[src/handlers/tool-handlers.ts](src/handlers/tool-handlers.ts)** - Tool implementations (444 lines)
-- **[src/handlers/prompt-handlers.ts](src/handlers/prompt-handlers.ts)** - Prompt generators (125 lines)
+- **[src/handlers/tool-handlers.ts](src/handlers/tool-handlers.ts)** - Tool implementations (635 lines)
+- **[src/handlers/prompt-handlers.ts](src/handlers/prompt-handlers.ts)** - Prompt generators (130 lines)
 - **[src/handlers/resource-handlers.ts](src/handlers/resource-handlers.ts)** - Resource handlers (189 lines)
-- **[src/definitions/tools.ts](src/definitions/tools.ts)** - Tool schemas (168 lines)
-- **[src/services/athenahealth-client.ts](src/services/athenahealth-client.ts)** - API client
+- **[src/definitions/tools.ts](src/definitions/tools.ts)** - Tool schemas (226 lines)
+
+**API Client Layer (Service-Oriented):**
+- **[src/services/athenahealth-client.ts](src/services/athenahealth-client.ts)** - Unified client interface (130 lines)
+- **[src/services/base-client.ts](src/services/base-client.ts)** - Authentication & HTTP client (220 lines)
+- **[src/services/patient-service.ts](src/services/patient-service.ts)** - Patient operations (130 lines)
+- **[src/services/clinical-service.ts](src/services/clinical-service.ts)** - Clinical data (160 lines)
+- **[src/services/encounter-service.ts](src/services/encounter-service.ts)** - Encounter management (100 lines)
+- **[src/services/scheduling-service.ts](src/services/scheduling-service.ts)** - Appointments & providers (160 lines)
 
 ---
 
@@ -436,6 +463,15 @@ For support and questions:
 ---
 
 ## Changelog
+
+### Version 1.2.0
+- Added encounter management functionality (4 new tools: get_patient_encounters, get_encounter, create_encounter, update_encounter)
+- Refactored athenahealth client into service-oriented architecture
+  - Separated into base-client, patient-service, clinical-service, encounter-service, scheduling-service
+  - Reduced file sizes from 800 lines to 100-220 lines per module
+- Total tools increased from 9 to 13
+- Documented encounter endpoints return 404 in sandbox (require production)
+- Enhanced architecture documentation with service layer breakdown
 
 ### Version 1.1.0
 - Refactored codebase into modular architecture

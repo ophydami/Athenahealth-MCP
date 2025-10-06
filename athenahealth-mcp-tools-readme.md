@@ -4,9 +4,9 @@
 
 This document provides a comprehensive guide to all athenahealth MCP (Model Context Protocol) tools, including which tools work in the sandbox environment, which have limitations, and what's required for production use.
 
-**Test Environment:** athenahealth Preview/Sandbox Environment  
-**Test Date:** October 5, 2025  
-**Total Tools:** 9
+**Test Environment:** athenahealth Preview/Sandbox Environment
+**Test Date:** October 6, 2025
+**Total Tools:** 13
 
 ---
 
@@ -14,13 +14,13 @@ This document provides a comprehensive guide to all athenahealth MCP (Model Cont
 
 | Status | Count | Percentage |
 |--------|-------|------------|
-| ✅ Working in Sandbox | 5 | 56% |
-| ❌ Not Working (Sandbox Limitations) | 4 | 44% |
-| 🧪 Fully Tested | 9 | 100% |
+| ✅ Working in Sandbox | 5 | 38% |
+| ❌ Not Working (Sandbox Limitations) | 8 | 62% |
+| 🧪 Total Tools | 13 | 100% |
 
 ---
 
-## ✅ WORKING TOOLS (5/9)
+## ✅ WORKING TOOLS (5/13)
 
 These tools are fully functional in the sandbox environment.
 
@@ -362,7 +362,7 @@ Output:
 
 ---
 
-## ❌ NON-WORKING TOOLS (4/9)
+## ❌ NON-WORKING TOOLS (8/13)
 
 These tools have sandbox limitations and require production environment.
 
@@ -817,7 +817,319 @@ notes: "Take with food"  // optional
 
 ---
 
-### 10. acknowledge_alert (Not Fully Tested)
+### 10. get_patient_encounters
+
+**What it does:** Retrieve all encounters for a specific patient
+
+**Status:** ❌ Not Working - 404 Error
+
+**Error Message:**
+```
+Request failed with status code 404
+Encounter endpoints not available in preview/sandbox environment
+```
+
+**Parameters:**
+- `patient_id` (required) - Patient ID
+- `department_id` (optional) - Filter by department
+- `start_date` (optional) - Filter encounters from this date (YYYY-MM-DD)
+- `end_date` (optional) - Filter encounters until this date (YYYY-MM-DD)
+- `status` (optional) - Filter by encounter status (OPEN, CLOSED, SIGNED)
+
+**Example Prompts (that don't work in sandbox):**
+```
+Get all encounters for patient "134"
+
+List encounters for patient "61378" in department "1"
+
+Show me patient "134" encounters from "2025-01-01" to "2025-10-01"
+
+Get all open encounters for patient "134"
+```
+
+**Attempted API Call:**
+```javascript
+athenahealth:get_patient_encounters
+patient_id: "134"
+department_id: "1"  // optional
+start_date: "2025-01-01"  // optional
+end_date: "2025-10-01"  // optional
+status: "OPEN"  // optional
+```
+
+**Production Requirements:**
+
+1. ✅ **Encounter Endpoints Enabled**
+   - `/patients/{patientid}/encounters` endpoint access
+   - Clinical documentation access
+   - Chart viewing permissions
+
+2. ✅ **Encounter Data Populated**
+   - Patients must have documented encounters
+   - Visit notes and documentation completed
+   - Encounter types configured
+
+3. ✅ **Proper Permissions**
+   - API credentials must have encounter read permissions
+   - Chart access permissions configured
+   - Department access rules established
+
+**Expected Production Response:**
+```json
+[
+  {
+    "encounterid": "12345",
+    "patientid": "134",
+    "departmentid": "1",
+    "providerid": "71",
+    "encounterdate": "2025-09-15",
+    "encountertype": "Office Visit",
+    "chiefcomplaint": "Annual physical exam",
+    "status": "SIGNED",
+    "diagnosiscodes": [
+      {
+        "code": "Z00.00",
+        "description": "Encounter for general adult medical examination",
+        "codingsystem": "ICD-10"
+      }
+    ]
+  }
+]
+```
+
+---
+
+### 11. get_encounter
+
+**What it does:** Retrieve detailed information for a specific encounter
+
+**Status:** ❌ Not Working - 404 Error
+
+**Error Message:**
+```
+Request failed with status code 404
+Encounter endpoints not available in preview/sandbox environment
+```
+
+**Parameters:**
+- `encounter_id` (required) - Encounter ID
+
+**Example Prompts (that don't work in sandbox):**
+```
+Get encounter details for encounter "12345"
+
+Show me encounter "67890" details
+
+Retrieve encounter with ID "54321"
+```
+
+**Attempted API Call:**
+```javascript
+athenahealth:get_encounter
+encounter_id: "12345"
+```
+
+**Production Requirements:**
+
+1. ✅ **Encounter Endpoints Enabled**
+   - `/encounters/{encounterid}` endpoint access
+   - Clinical documentation access
+
+2. ✅ **Valid Encounter ID**
+   - Encounter must exist in the system
+   - Encounter must be accessible to the API user
+
+3. ✅ **Chart Access Permissions**
+   - Proper chart sharing groups configured
+   - Cross-department access if needed
+
+**Expected Production Response:**
+```json
+{
+  "encounterid": "12345",
+  "patientid": "134",
+  "departmentid": "1",
+  "providerid": "71",
+  "encounterdate": "2025-09-15",
+  "encountertype": "Office Visit",
+  "chiefcomplaint": "Annual physical exam",
+  "status": "SIGNED",
+  "visittype": "Preventive",
+  "diagnosiscodes": [
+    {
+      "code": "Z00.00",
+      "description": "Encounter for general adult medical examination",
+      "codingsystem": "ICD-10"
+    }
+  ],
+  "procedurecodes": [
+    {
+      "code": "99385",
+      "description": "Initial preventive care visit, ages 18-39",
+      "codingsystem": "CPT"
+    }
+  ],
+  "lastmodified": "2025-09-15T16:30:00Z"
+}
+```
+
+---
+
+### 12. create_encounter
+
+**What it does:** Create a new patient encounter
+
+**Status:** ❌ Not Working - 404 Error
+
+**Error Message:**
+```
+Request failed with status code 404
+Encounter creation endpoint not available in preview/sandbox environment
+```
+
+**Parameters:**
+- `patient_id` (required) - Patient ID
+- `department_id` (required) - Department ID
+- `encounter_date` (required) - Encounter date (YYYY-MM-DD)
+- `provider_id` (optional) - Provider ID
+- `encounter_type` (optional) - Type of encounter
+- `chief_complaint` (optional) - Chief complaint
+- `visit_type` (optional) - Visit type
+
+**Example Prompts (that don't work in sandbox):**
+```
+Create a new encounter for patient "134" in department "1" on "2025-10-10" with provider "71" for "Annual physical"
+
+Create encounter for patient "61378", department "1", date "2025-11-15", chief complaint "Follow-up visit"
+```
+
+**Attempted API Call:**
+```javascript
+athenahealth:create_encounter
+patient_id: "134"
+department_id: "1"
+encounter_date: "2025-10-10"
+provider_id: "71"  // optional
+encounter_type: "Office Visit"  // optional
+chief_complaint: "Annual physical exam"  // optional
+visit_type: "Preventive"  // optional
+```
+
+**Production Requirements:**
+
+1. ✅ **Encounter Creation Enabled**
+   - `/encounters` POST endpoint access
+   - Clinical documentation license
+   - Chart creation permissions
+
+2. ✅ **Appointment Association**
+   - May require linking to an existing appointment
+   - Appointment ID might be necessary
+   - Scheduling integration configured
+
+3. ✅ **Provider Credentials**
+   - Valid provider ID with documentation privileges
+   - Provider assigned to the department
+   - Proper clinical roles configured
+
+4. ✅ **Encounter Types Configured**
+   - Valid encounter types defined in system
+   - Visit types properly set up
+   - Billing rules associated
+
+**Expected Production Response:**
+```json
+{
+  "encounterid": "78901",
+  "patientid": "134",
+  "departmentid": "1",
+  "providerid": "71",
+  "encounterdate": "2025-10-10",
+  "status": "OPEN",
+  "created": "2025-10-06T14:30:00Z"
+}
+```
+
+---
+
+### 13. update_encounter
+
+**What it does:** Update an existing encounter with new information
+
+**Status:** ❌ Not Working - 404 Error
+
+**Error Message:**
+```
+Request failed with status code 404
+Encounter update endpoint not available in preview/sandbox environment
+```
+
+**Parameters:**
+- `encounter_id` (required) - Encounter ID
+- `chief_complaint` (optional) - Updated chief complaint
+- `diagnosis_codes` (optional) - Array of diagnosis codes
+- `procedure_codes` (optional) - Array of procedure codes
+- `status` (optional) - Encounter status (OPEN, CLOSED, SIGNED)
+
+**Example Prompts (that don't work in sandbox):**
+```
+Update encounter "12345" with chief complaint "Hypertension follow-up"
+
+Update encounter "67890" with diagnosis code "I10" (Hypertension)
+
+Mark encounter "12345" as SIGNED
+```
+
+**Attempted API Call:**
+```javascript
+athenahealth:update_encounter
+encounter_id: "12345"
+chief_complaint: "Hypertension follow-up"  // optional
+diagnosis_codes: [
+  {
+    "code": "I10",
+    "description": "Essential hypertension",
+    "codingsystem": "ICD-10"
+  }
+]  // optional
+status: "SIGNED"  // optional
+```
+
+**Production Requirements:**
+
+1. ✅ **Encounter Update Permissions**
+   - `/encounters/{encounterid}` PUT endpoint access
+   - Chart modification permissions
+   - Clinical documentation rights
+
+2. ✅ **Encounter Status Rules**
+   - Understanding of encounter workflow (OPEN → CLOSED → SIGNED)
+   - Cannot modify signed encounters without special permissions
+   - Provider authentication for signing
+
+3. ✅ **Coding Requirements**
+   - Valid ICD-10 diagnosis codes
+   - Valid CPT/HCPCS procedure codes
+   - Coding system identifiers correct
+
+4. ✅ **Audit Trail**
+   - All modifications logged
+   - Provider attribution tracked
+   - Cannot delete or hide changes
+
+**Expected Production Response:**
+```json
+{
+  "encounterid": "12345",
+  "status": "updated",
+  "lastmodified": "2025-10-06T15:45:00Z",
+  "modifiedby": "dr.bricker"
+}
+```
+
+---
+
+### 14. acknowledge_alert (Not Fully Tested)
 
 **What it does:** Acknowledge a clinical alert for a patient
 
@@ -1003,6 +1315,7 @@ acknowledged_by: "dr.smith"
 | **Administrative** | list_departments, list_providers, search_patients, create_patient | - |
 | **Scheduling** | check_appointment_availability | create_appointment |
 | **Clinical** | - | get_clinical_summary, create_prescription, check_drug_interactions, acknowledge_alert |
+| **Encounters** | - | get_patient_encounters, get_encounter, create_encounter, update_encounter |
 
 ---
 
@@ -1019,6 +1332,10 @@ acknowledged_by: "dr.smith"
 | check_drug_interactions | ❌ Failed | Clinical endpoints, drug database |
 | get_clinical_summary | ❌ Empty | Clinical endpoints, populated data |
 | create_prescription | ❌ Failed | E-prescribing, pharmacy integration |
+| get_patient_encounters | ❌ 404 Error | Encounter endpoints, documentation access |
+| get_encounter | ❌ 404 Error | Encounter endpoints, valid encounter ID |
+| create_encounter | ❌ 404 Error | Encounter creation endpoint, documentation license |
+| update_encounter | ❌ 404 Error | Encounter update permissions, chart modification |
 | acknowledge_alert | ❌ Untested | Alerts system, active alerts |
 
 ---
@@ -1036,6 +1353,10 @@ acknowledged_by: "dr.smith"
 | check_drug_interactions | patient_id, medications (array) |
 | get_clinical_summary | patient_id |
 | create_prescription | patient_id, medication_name, dosage, frequency, route, quantity, days_supply, refills |
+| get_patient_encounters | patient_id |
+| get_encounter | encounter_id |
+| create_encounter | patient_id, department_id, encounter_date |
+| update_encounter | encounter_id |
 | acknowledge_alert | alert_id, acknowledged_by |
 
 ---
@@ -1055,6 +1376,7 @@ acknowledged_by: "dr.smith"
 2. ❌ Access clinical data
 3. ❌ Create prescriptions
 4. ❌ Check drug interactions
+5. ❌ Manage encounters (get, create, update)
 
 ### Sample Workflow (Working in Sandbox)
 
@@ -1126,6 +1448,13 @@ For production environment setup:
 
 ## 📝 Changelog
 
+**October 6, 2025** - Added encounter management tools
+- Added 4 new encounter tools: get_patient_encounters, get_encounter, create_encounter, update_encounter
+- Updated total tools from 9 to 13
+- Documented all encounter endpoints return 404 in sandbox
+- Updated summary percentages (5/13 working = 38%, 8/13 not working = 62%)
+- Added encounters category to quick reference tables
+
 **October 5, 2025** - Initial comprehensive testing
 - Tested all 9 athenahealth MCP tools
 - Documented sandbox limitations
@@ -1140,7 +1469,7 @@ This documentation is provided as-is for reference purposes.
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** October 5, 2025  
-**Environment Tested:** athenahealth Preview/Sandbox  
-**Tools Tested:** 9/9 (100%)
+**Document Version:** 1.1
+**Last Updated:** October 6, 2025
+**Environment Tested:** athenahealth Preview/Sandbox
+**Tools Tested:** 13/13 (100%)

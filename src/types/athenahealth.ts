@@ -264,6 +264,33 @@ export const ClinicalAlertSchema = z.object({
 
 export type ClinicalAlert = z.infer<typeof ClinicalAlertSchema>;
 
+// Encounter types
+export const EncounterSchema = z.object({
+  encounterid: z.string(),
+  patientid: z.string(),
+  departmentid: z.string(),
+  providerid: z.string().optional(),
+  encounterdate: z.string(),
+  encountertype: z.string().optional(),
+  chiefcomplaint: z.string().optional(),
+  diagnosiscodes: z.array(z.object({
+    code: z.string(),
+    description: z.string().optional(),
+    codingsystem: z.string().optional(), // ICD-10, SNOMED, etc.
+  })).optional(),
+  procedurecodes: z.array(z.object({
+    code: z.string(),
+    description: z.string().optional(),
+    codingsystem: z.string().optional(), // CPT, HCPCS, etc.
+  })).optional(),
+  status: z.enum(['OPEN', 'CLOSED', 'SIGNED']).optional(),
+  visittype: z.string().optional(),
+  appointmentid: z.string().optional(),
+  lastmodified: z.string().optional(),
+});
+
+export type Encounter = z.infer<typeof EncounterSchema>;
+
 // Authentication types
 export interface AuthTokenResponse {
   access_token: string;

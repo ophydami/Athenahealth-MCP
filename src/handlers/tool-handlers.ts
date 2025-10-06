@@ -466,4 +466,169 @@ export class ToolHandlers {
       };
     }
   }
+
+  async handleGetPatientEncounters(args: any) {
+    try {
+      const { patient_id, department_id, start_date, end_date, status } = args;
+
+      const encounters = await this.client.getPatientEncounters(patient_id, {
+        departmentid: department_id,
+        startdate: start_date,
+        enddate: end_date,
+        status,
+      });
+
+      auditLog('ENCOUNTER_ACCESS', {
+        patientId: patient_id,
+        result: 'success',
+        resourceType: 'ENCOUNTER',
+      });
+
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(encounters, null, 2),
+          },
+        ],
+      };
+    } catch (error: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify({
+              error: 'Failed to get patient encounters',
+              message: error.message || 'Unknown error occurred',
+              status: error.status || null,
+              note: 'Encounter endpoints may not be available in the athenahealth preview/sandbox environment.',
+            }, null, 2),
+          },
+        ],
+      };
+    }
+  }
+
+  async handleGetEncounter(args: any) {
+    try {
+      const { encounter_id } = args;
+      const encounter = await this.client.getEncounter(encounter_id);
+
+      auditLog('ENCOUNTER_ACCESS', {
+        resourceId: encounter_id,
+        result: 'success',
+        resourceType: 'ENCOUNTER',
+      });
+
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(encounter, null, 2),
+          },
+        ],
+      };
+    } catch (error: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify({
+              error: 'Failed to get encounter',
+              message: error.message || 'Unknown error occurred',
+              status: error.status || null,
+              note: 'Encounter endpoints may not be available in the athenahealth preview/sandbox environment.',
+            }, null, 2),
+          },
+        ],
+      };
+    }
+  }
+
+  async handleCreateEncounter(args: any) {
+    try {
+      const encounterData = {
+        patientid: args.patient_id,
+        departmentid: args.department_id,
+        providerid: args.provider_id,
+        encounterdate: args.encounter_date,
+        encountertype: args.encounter_type,
+        chiefcomplaint: args.chief_complaint,
+        appointmentid: args.appointment_id,
+      };
+
+      const encounter = await this.client.createEncounter(encounterData);
+
+      auditLog('ENCOUNTER_CREATE', {
+        patientId: args.patient_id,
+        result: 'success',
+        resourceType: 'ENCOUNTER',
+      });
+
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(encounter, null, 2),
+          },
+        ],
+      };
+    } catch (error: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify({
+              error: 'Failed to create encounter',
+              message: error.message || 'Unknown error occurred',
+              status: error.status || null,
+              note: 'Encounter creation may not be available in the athenahealth preview/sandbox environment. This endpoint typically requires production API access.',
+            }, null, 2),
+          },
+        ],
+      };
+    }
+  }
+
+  async handleUpdateEncounter(args: any) {
+    try {
+      const encounterData = {
+        chiefcomplaint: args.chief_complaint,
+        diagnosiscodes: args.diagnosis_codes,
+        procedurecodes: args.procedure_codes,
+        status: args.status,
+      };
+
+      const encounter = await this.client.updateEncounter(args.encounter_id, encounterData);
+
+      auditLog('ENCOUNTER_UPDATE', {
+        resourceId: args.encounter_id,
+        result: 'success',
+        resourceType: 'ENCOUNTER',
+      });
+
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(encounter, null, 2),
+          },
+        ],
+      };
+    } catch (error: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify({
+              error: 'Failed to update encounter',
+              message: error.message || 'Unknown error occurred',
+              status: error.status || null,
+              note: 'Encounter update may not be available in the athenahealth preview/sandbox environment.',
+            }, null, 2),
+          },
+        ],
+      };
+    }
+  }
 }

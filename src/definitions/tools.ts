@@ -164,4 +164,62 @@ export const toolDefinitions: Tool[] = [
       required: ['firstname', 'lastname', 'dob', 'sex', 'department_id'],
     },
   },
+  {
+    name: 'get_patient_encounters',
+    description: 'Get all encounters for a patient',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        patient_id: { type: 'string', description: 'Patient ID' },
+        department_id: { type: 'string', description: 'Filter by department ID (optional)' },
+        start_date: { type: 'string', description: 'Start date filter (YYYY-MM-DD) (optional)' },
+        end_date: { type: 'string', description: 'End date filter (YYYY-MM-DD) (optional)' },
+        status: { type: 'string', description: 'Filter by status: OPEN, CLOSED, SIGNED (optional)' },
+      },
+      required: ['patient_id'],
+    },
+  },
+  {
+    name: 'get_encounter',
+    description: 'Get details of a specific encounter',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        encounter_id: { type: 'string', description: 'Encounter ID' },
+      },
+      required: ['encounter_id'],
+    },
+  },
+  {
+    name: 'create_encounter',
+    description: 'Create a new encounter for a patient',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        patient_id: { type: 'string', description: 'Patient ID' },
+        department_id: { type: 'string', description: 'Department ID' },
+        provider_id: { type: 'string', description: 'Provider ID (optional)' },
+        encounter_date: { type: 'string', description: 'Encounter date (YYYY-MM-DD)' },
+        encounter_type: { type: 'string', description: 'Type of encounter (optional)' },
+        chief_complaint: { type: 'string', description: 'Chief complaint (optional)' },
+        appointment_id: { type: 'string', description: 'Associated appointment ID (optional)' },
+      },
+      required: ['patient_id', 'department_id', 'encounter_date'],
+    },
+  },
+  {
+    name: 'update_encounter',
+    description: 'Update an existing encounter',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        encounter_id: { type: 'string', description: 'Encounter ID' },
+        chief_complaint: { type: 'string', description: 'Chief complaint (optional)' },
+        diagnosis_codes: { type: 'string', description: 'Comma-separated ICD-10 diagnosis codes (optional)' },
+        procedure_codes: { type: 'string', description: 'Comma-separated CPT procedure codes (optional)' },
+        status: { type: 'string', description: 'Status: OPEN, CLOSED, SIGNED (optional)' },
+      },
+      required: ['encounter_id'],
+    },
+  },
 ];

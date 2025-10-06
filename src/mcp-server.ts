@@ -203,6 +203,18 @@ export class AthenaHealthMCPServer {
           case 'create_patient':
             return await this.toolHandlers.handleCreatePatient(args);
 
+          case 'get_patient_encounters':
+            return await this.toolHandlers.handleGetPatientEncounters(args);
+
+          case 'get_encounter':
+            return await this.toolHandlers.handleGetEncounter(args);
+
+          case 'create_encounter':
+            return await this.toolHandlers.handleCreateEncounter(args);
+
+          case 'update_encounter':
+            return await this.toolHandlers.handleUpdateEncounter(args);
+
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
