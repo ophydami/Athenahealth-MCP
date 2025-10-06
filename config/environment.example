@@ -1,0 +1,33 @@
+# athenahealth API Configuration
+ATHENA_CLIENT_ID=your_client_id_here
+ATHENA_CLIENT_SECRET=your_client_secret_here
+ATHENA_BASE_URL=https://api.athenahealth.com
+ATHENA_VERSION=v1
+ATHENA_PRACTICE_ID=your_practice_id_here
+
+# Environment Configuration
+NODE_ENV=development
+LOG_LEVEL=info
+
+# Optional: Custom logging configuration
+# LOG_FILE_PATH=./logs
+# LOG_MAX_SIZE=10485760  # 10MB
+# LOG_MAX_FILES=5
+
+# Optional: Rate limiting configuration
+# RATE_LIMIT_REQUESTS_PER_MINUTE=100
+# RATE_LIMIT_BURST_SIZE=10
+
+# Optional: Security configuration
+# ENCRYPTION_KEY=your_encryption_key_here
+# JWT_SECRET=your_jwt_secret_here
+
+# Optional: Database configuration (if using local caching)
+# DB_CONNECTION_STRING=
+# DB_ENCRYPTION_KEY=
+
+# Optional: Monitoring and alerting
+# SENTRY_DSN=
+# DATADOG_API_KEY=
+# HEALTH_CHECK_INTERVAL=30000  # 30 seconds 
+
