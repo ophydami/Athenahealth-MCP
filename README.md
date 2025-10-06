@@ -42,6 +42,8 @@ A Model Context Protocol (MCP) server that provides seamless integration with at
 
 ### Quick Start
 
+### Option 1: Use with Claude Desktop (MCP)
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/ophydami/athenahealth-mcp-server.git
@@ -64,10 +66,79 @@ A Model Context Protocol (MCP) server that provides seamless integration with at
    npm run build
    ```
 
-5. **Start the server**
+5. **Start the MCP server**
    ```bash
    npm start
    ```
+
+6. **Configure Claude Desktop**
+   ```bash
+   claude mcp add athenahealth-mcp
+   ```
+
+### Option 2: Use with n8n (Webhook Bridge)
+
+If you prefer using n8n for workflow automation instead of Claude Desktop, you can use the webhook bridge:
+
+1. **Complete steps 1-4 above**
+
+2. **Start the webhook bridge server**
+   ```bash
+   npm run webhook-bridge
+   ```
+
+   The server will start on `http://localhost:3000` (configurable via `WEBHOOK_PORT` env variable)
+
+3. **Use in n8n workflows**
+
+   In your n8n workflow, add an **HTTP Request** node with:
+   - **Method**: GET or POST (depending on endpoint)
+   - **URL**: `http://localhost:3000/[endpoint]`
+   - **Authentication**: None (handled by environment variables)
+   - **Body**: JSON (for POST requests)
+
+   **Example n8n HTTP Request nodes:**
+
+   **List Departments:**
+   ```
+   Method: GET
+   URL: http://localhost:3000/departments
+   ```
+
+   **Search Patients:**
+   ```
+   Method: POST
+   URL: http://localhost:3000/patients/search
+   Body: {
+     "lastname": "Smith",
+     "firstname": "John"
+   }
+   ```
+
+   **Create Patient:**
+   ```
+   Method: POST
+   URL: http://localhost:3000/patients
+   Body: {
+     "firstname": "John",
+     "lastname": "Test",
+     "dob": "05/20/1985",
+     "sex": "M",
+     "department_id": "1",
+     "email": "john.test@example.com",
+     "mobile_phone": "6179876543"
+   }
+   ```
+
+   **Get Clinical Summary:**
+   ```
+   Method: GET
+   URL: http://localhost:3000/patients/134/clinical?include_allergies=true&include_prescriptions=true
+   ```
+
+4. **View available endpoints**
+
+   Navigate to `http://localhost:3000/` in your browser to see all available endpoints and their documentation.
 
 ## Configuration
 
@@ -80,6 +151,7 @@ A Model Context Protocol (MCP) server that provides seamless integration with at
 | `ATHENA_BASE_URL` | athenahealth API Base URL | Yes | - |
 | `ATHENA_VERSION` | API Version | No | `v1` |
 | `ATHENA_PRACTICE_ID` | Practice ID | Yes | - |
+| `WEBHOOK_PORT` | Webhook bridge server port (n8n mode) | No | `3000` |
 | `NODE_ENV` | Environment | No | `development` |
 | `LOG_LEVEL` | Log Level | No | `info` |
 
