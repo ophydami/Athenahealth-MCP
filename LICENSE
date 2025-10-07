@@ -1,0 +1,56 @@
+MIT License
+
+Copyright (c) 2025 athenahealth MCP Server Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+HEALTHCARE DATA DISCLAIMER:
+
+This software is designed to integrate with healthcare systems and may process
+Protected Health Information (PHI) and other sensitive healthcare data. Users
+of this software are responsible for:
+
+1. Ensuring compliance with all applicable healthcare regulations, including
+   but not limited to HIPAA (Health Insurance Portability and Accountability
+   Act), HITECH (Health Information Technology for Economic and Clinical
+   Health Act), and other relevant local, state, and federal regulations.
+
+2. Implementing appropriate technical, physical, and administrative safeguards
+   to protect the confidentiality, integrity, and availability of healthcare
+   data processed through this software.
+
+3. Obtaining all necessary Business Associate Agreements (BAAs) and other
+   required legal agreements with athenahealth and other third parties.
+
+4. Conducting appropriate security assessments, risk analyses, and compliance
+   audits before deploying this software in production environments.
+
+5. Maintaining comprehensive audit logs and documentation as required by
+   applicable regulations.
+
+THE AUTHORS AND CONTRIBUTORS OF THIS SOFTWARE MAKE NO REPRESENTATIONS OR
+WARRANTIES REGARDING HIPAA COMPLIANCE, REGULATORY COMPLIANCE, OR FITNESS FOR
+USE IN HEALTHCARE ENVIRONMENTS. USE OF THIS SOFTWARE IN PRODUCTION HEALTHCARE
+SETTINGS IS AT YOUR OWN RISK.
+
+Users must independently verify that their implementation meets all applicable
+regulatory requirements and industry standards before processing any real
+patient data or deploying in production environments.
