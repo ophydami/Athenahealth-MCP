@@ -21,7 +21,7 @@
     "clinical-decision-support",
     "hipaa"
   ],
-  "author": "Your Name",
+  "author": "Gboyega Ofi <gboyega.ofi@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.0",

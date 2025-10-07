@@ -530,6 +530,7 @@ The codebase is modularized for maintainability:
 For support and questions:
 - Create an issue in the GitHub repository
 - Review the comprehensive [tool reference guide](athenahealth-mcp-tools-readme.md)
+- Contact the author: Gboyega Ofi at [gboyega.ofi@gmail.com](mailto:gboyega.ofi@gmail.com)
 - Contact athenahealth Developer Support: developer-support@athenahealth.com
 
 ---
@@ -561,6 +562,14 @@ For support and questions:
 - Clinical decision support prompts
 - HIPAA-compliant logging
 - OAuth 2.0 authentication
+
+---
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025 Gboyega Ofi ([gboyega.ofi@gmail.com](mailto:gboyega.ofi@gmail.com))
 
 ---
 
